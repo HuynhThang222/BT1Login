@@ -1,58 +1,98 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%-- 
-  QUAN TRỌNG: Bạn phải thêm dòng này để JSP hiểu các thẻ <c:choose>, <c:if>...
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Header</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Topbar</title>
+<style>
+/* ===== Topbar Container ===== */
+.topbar {
+    background-color: #f4f4f4;
+    padding: 10px 20px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    position: fixed;   /* cố định trên cùng */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+/* ===== List Menu ===== */
+.topbar ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+/* ===== List Item ===== */
+.topbar ul li {
+	margin-left: 15px;
+}
+
+/* ===== Links ===== */
+.topbar ul li a {
+	text-decoration: none;
+	color: #333;
+	font-weight: 500;
+	transition: color 0.2s;
+}
+
+.topbar ul li a:hover {
+	color: #007BFF;
+}
+
+/* ===== Search Icon ===== */
+.search-button {
+	cursor: pointer;
+	font-size: 16px;
+}
+
+/* ===== Responsive: small screens ===== */
+@media screen and (max-width: 600px) {
+	.topbar {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.topbar ul {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.topbar ul li {
+		margin-left: 0;
+		margin-top: 5px;
+	}
+}
+</style>
 </head>
 <body>
 
-	<div class="col-sm-6">
-		<ul class="list-inline right-topbar pull-right">
-
+	<div class="topbar">
+		<ul>
+			<!-- Khi người dùng CHƯA đăng nhập -->
+			<%-- Khi người dùng chưa đăng nhập --%>
 			<c:choose>
-				<%-- 1. Khi người dùng CHƯA đăng nhập --%>
 				<c:when test="${sessionScope.account == null}">
-					<li><a href="${pageContext.request.contextPath}/login">Đăng
-							nhập</a> | <a href="${pageContext.request.contextPath}/register">Đăng
-							ký</a></li>
+					<li><a href="login">Đăng nhập</a></li>
+					<li><a href="register">Đăng ký</a></li>
 				</c:when>
-
-				<%-- 2. Khi người dùng ĐÃ đăng nhập --%>
 				<c:otherwise>
-					<li><a>Xin chào, ${sessionScope.account.fullName}</a> |</li>
-
-					<%-- 
-					  KIỂM TRA TƯƠNG TỰ:
-					  Kiểm tra xem vai trò (role) của user có phải là 'admin' không.
-					  (Điều này giả sử object User của bạn có hàm getRole() hoặc getIsAdmin())
-					--%>
-					<c:if test="${sessionScope.account.role == 'admin'}">
-						<li><a
-							href="${pageContext.request.contextPath}/admin/dashboard">Trang
-								Quản Lý</a> |</li>
-					</c:if>
-
-					<li><a
-						href="${pageContext.request.contextPath}/member/myaccount">Tài
-							khoản của tôi</a> |</li>
-					<li><a href="${pageContext.request.contextPath}/logout">Đăng
-							Xuất</a></li>
+					<li>Xin chào, ${sessionScope.account.fullName}</li>
 				</c:otherwise>
 			</c:choose>
 
-			<%-- Icon tìm kiếm này luôn hiển thị, dù đăng nhập hay chưa --%>
-			<li><i class="search fa fa-search search-button"></i></li>
+
+			<!-- Icon tìm kiếm luôn hiển thị -->
+			<li><span class="search-button">&#128269;</span></li>
 		</ul>
 	</div>
 
